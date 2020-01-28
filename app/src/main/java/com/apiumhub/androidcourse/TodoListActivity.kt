@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.RecyclerView
 
-class MainActivity : AppCompatActivity() {
+class TodoListActivity : AppCompatActivity() {
 
     lateinit var recyclerView: RecyclerView
 
