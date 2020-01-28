@@ -23,6 +23,8 @@ class TodoListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        supportActionBar?.title = "ToDo App"
+        
         viewLayoutManager = LinearLayoutManager(this)
         todoAdapter = TodoAdapter(data)
 
