@@ -2,6 +2,7 @@ package com.apiumhub.androidcourse
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.apiumhub.androidcourse.adapter.TodoAdapter
@@ -20,11 +21,15 @@ class TodoListActivity : AppCompatActivity() {
 
         viewLayoutManager = LinearLayoutManager(this)
         todoAdapter = TodoAdapter(data)
+
         recyclerView = findViewById<RecyclerView>(R.id.recyclerView).apply {
             setHasFixedSize(true)
             layoutManager = viewLayoutManager
             adapter = todoAdapter
         }
+
+        val dividerItemDecoration = DividerItemDecoration(recyclerView.context, (viewLayoutManager as LinearLayoutManager).orientation)
+        recyclerView.addItemDecoration(dividerItemDecoration)
     }
 
     override fun onResume() {
