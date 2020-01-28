@@ -7,10 +7,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.apiumhub.androidcourse.adapter.TodoAdapter
 import com.apiumhub.androidcourse.adapter.TodoItem
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlin.random.Random
 
 class TodoListActivity : AppCompatActivity() {
 
-    lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var fab: FloatingActionButton
+
     private lateinit var viewLayoutManager: RecyclerView.LayoutManager
     private lateinit var todoAdapter: TodoAdapter
     private val data: MutableList<TodoItem> = mutableListOf()
@@ -30,6 +34,14 @@ class TodoListActivity : AppCompatActivity() {
 
         val dividerItemDecoration = DividerItemDecoration(recyclerView.context, (viewLayoutManager as LinearLayoutManager).orientation)
         recyclerView.addItemDecoration(dividerItemDecoration)
+
+        fab = findViewById<FloatingActionButton>(R.id.floatingActionButton)
+        fab.setOnClickListener {
+            val randomNumber = Random(System.currentTimeMillis()).nextInt()
+            val todoItem = TodoItem("Elemento $randomNumber", System.currentTimeMillis())
+            data.add(todoItem)
+            todoAdapter.notifyDataSetChanged()
+        }
     }
 
     override fun onResume() {
