@@ -3,15 +3,21 @@ package com.apiumhub.androidcourse.adapter
 import android.os.Parcel
 import android.os.Parcelable
 
-data class TodoItem(val title: String?, val date: Long) : Parcelable {
-
+data class TodoItem(
+    val title: String?,
+    val description: String?,
+    val date: Long
+) : Parcelable {
+    
     constructor(parcel: Parcel) : this(
+        parcel.readString(),
         parcel.readString(),
         parcel.readLong()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(title)
+        parcel.writeString(description)
         parcel.writeLong(date)
     }
 
