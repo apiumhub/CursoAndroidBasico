@@ -9,7 +9,10 @@ import kotlinx.android.synthetic.main.row_element.view.*
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class TodoAdapter(private val data: List<TodoItem>) : RecyclerView.Adapter<TodoViewHolder>() {
+class TodoAdapter(
+    private val data: List<TodoItem>,
+    private val onClick: (TodoItem) -> Unit
+) : RecyclerView.Adapter<TodoViewHolder>() {
 
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy")
 
@@ -26,5 +29,7 @@ class TodoAdapter(private val data: List<TodoItem>) : RecyclerView.Adapter<TodoV
         val todoItem: TodoItem = data[position]
         holder.itemView.title.text = todoItem.title
         holder.itemView.date.text = dateFormat.format(Date(todoItem.date))
+
+        holder.itemView.setOnClickListener { onClick(todoItem) }
     }
 }

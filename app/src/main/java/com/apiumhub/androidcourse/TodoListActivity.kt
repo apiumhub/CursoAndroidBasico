@@ -24,9 +24,9 @@ class TodoListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         supportActionBar?.title = "ToDo App"
-        
+
         viewLayoutManager = LinearLayoutManager(this)
-        todoAdapter = TodoAdapter(data)
+        todoAdapter = TodoAdapter(data, ::onClick)
 
         recyclerView = findViewById<RecyclerView>(R.id.recyclerView).apply {
             setHasFixedSize(true)
@@ -34,16 +34,21 @@ class TodoListActivity : AppCompatActivity() {
             adapter = todoAdapter
         }
 
-        val dividerItemDecoration = DividerItemDecoration(recyclerView.context, (viewLayoutManager as LinearLayoutManager).orientation)
+        val dividerItemDecoration =
+            DividerItemDecoration(recyclerView.context, (viewLayoutManager as LinearLayoutManager).orientation)
         recyclerView.addItemDecoration(dividerItemDecoration)
 
-        fab = findViewById<FloatingActionButton>(R.id.floatingActionButton)
+        fab = findViewById(R.id.floatingActionButton)
         fab.setOnClickListener {
             val randomNumber = Random(System.currentTimeMillis()).nextInt()
             val todoItem = TodoItem("Elemento $randomNumber", System.currentTimeMillis())
             data.add(todoItem)
             todoAdapter.notifyDataSetChanged()
         }
+    }
+
+    private fun onClick(todoItem: TodoItem) {
+        startActivity(TodoDetailActivity.getCallingIntent(this, todoItem))
     }
 
     override fun onResume() {
