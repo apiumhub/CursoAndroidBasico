@@ -1,14 +1,16 @@
 package com.apiumhub.androidcourse
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.apiumhub.androidcourse.TodoDetailActivity.Companion.ARG_TODO_ITEM_ID
 import com.apiumhub.androidcourse.adapter.TodoAdapter
 import com.apiumhub.androidcourse.adapter.TodoItem
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlin.random.Random
 
 class TodoListActivity : AppCompatActivity() {
 
@@ -17,7 +19,7 @@ class TodoListActivity : AppCompatActivity() {
 
     private lateinit var viewLayoutManager: RecyclerView.LayoutManager
     private lateinit var todoAdapter: TodoAdapter
-    private val data: MutableList<TodoItem> = mutableListOf()
+    private val tasks: MutableList<TodoItem> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +28,7 @@ class TodoListActivity : AppCompatActivity() {
         supportActionBar?.title = "ToDo App"
 
         viewLayoutManager = LinearLayoutManager(this)
-        todoAdapter = TodoAdapter(data, ::onClick)
+        todoAdapter = TodoAdapter(tasks, ::onClick)
 
         recyclerView = findViewById<RecyclerView>(R.id.recyclerView).apply {
             setHasFixedSize(true)
@@ -40,26 +42,31 @@ class TodoListActivity : AppCompatActivity() {
 
         fab = findViewById(R.id.floatingActionButton)
         fab.setOnClickListener {
-            val randomNumber = Random(System.currentTimeMillis()).nextInt()
-            val todoItem = TodoItem("Elemento $randomNumber", "", System.currentTimeMillis())
-            data.add(todoItem)
-            todoAdapter.notifyDataSetChanged()
+            startActivityForResult(TodoDetailActivity.getCallingIntent(this), DETAIL_REQUEST_CODE)
         }
     }
 
     private fun onClick(todoItem: TodoItem) {
-        startActivity(TodoDetailActivity.getCallingIntent(this, todoItem))
+        startActivityForResult(TodoDetailActivity.getCallingIntent(this, todoItem), DETAIL_REQUEST_CODE)
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && data != null && requestCode == DETAIL_REQUEST_CODE) {
+            val todoItem: TodoItem? = data.extras?.getParcelable<TodoItem>(ARG_TODO_ITEM_ID)
+            todoItem?.let { newTodo ->
+                val find: TodoItem? = tasks.find { it.id == newTodo.id }
+                if (find != null) {
+                    tasks.remove(find)
+                }
+                tasks.addAll(listOf(newTodo))
+                tasks.sortBy { it.date }
+                todoAdapter.notifyDataSetChanged()
+            }
+        }
+    }
 
-        val elements: Array<TodoItem> = arrayOf(
-            TodoItem("Elemento 1", "Descripción 1", System.currentTimeMillis()),
-            TodoItem("Elemento 2", "Descripción 1", System.currentTimeMillis()),
-            TodoItem("Elemento 3", "Descripción 1", System.currentTimeMillis())
-        )
-        data.addAll(elements)
-        todoAdapter.notifyDataSetChanged()
+    companion object {
+        private const val DETAIL_REQUEST_CODE = 1000
     }
 }
