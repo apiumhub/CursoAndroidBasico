@@ -16,6 +16,8 @@ class TodoDetailActivity : AppCompatActivity() {
     lateinit var saveButton: Button
     lateinit var calendarView: CalendarView
 
+    private var todoItem: TodoItem? = null
+ 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_todo_detail)
@@ -24,10 +26,13 @@ class TodoDetailActivity : AppCompatActivity() {
         saveButton = findViewById(R.id.saveButton)
         calendarView = findViewById(R.id.calendarView)
 
-        val todoItem: TodoItem? = intent.extras?.getParcelable(ARG_TODO_ITEM_ID)
+        todoItem = intent.extras?.getParcelable(ARG_TODO_ITEM_ID)
         todoItem?.let {
             supportActionBar?.title = it.title
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+            descriptionTextView.text = it.description
+            calendarView.date = it.date
         }
     }
 

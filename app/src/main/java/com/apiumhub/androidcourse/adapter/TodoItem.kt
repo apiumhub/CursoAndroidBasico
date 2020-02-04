@@ -8,7 +8,7 @@ data class TodoItem(
     val description: String?,
     val date: Long
 ) : Parcelable {
-    
+
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),

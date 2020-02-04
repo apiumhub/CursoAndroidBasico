@@ -41,7 +41,7 @@ class TodoListActivity : AppCompatActivity() {
         fab = findViewById(R.id.floatingActionButton)
         fab.setOnClickListener {
             val randomNumber = Random(System.currentTimeMillis()).nextInt()
-            val todoItem = TodoItem("Elemento $randomNumber", System.currentTimeMillis())
+            val todoItem = TodoItem("Elemento $randomNumber", "", System.currentTimeMillis())
             data.add(todoItem)
             todoAdapter.notifyDataSetChanged()
         }
@@ -55,9 +55,9 @@ class TodoListActivity : AppCompatActivity() {
         super.onResume()
 
         val elements: Array<TodoItem> = arrayOf(
-            TodoItem("Elemento 1", System.currentTimeMillis()),
-            TodoItem("Elemento 2", System.currentTimeMillis()),
-            TodoItem("Elemento 3", System.currentTimeMillis())
+            TodoItem("Elemento 1", "Descripción 1", System.currentTimeMillis()),
+            TodoItem("Elemento 2", "Descripción 1", System.currentTimeMillis()),
+            TodoItem("Elemento 3", "Descripción 1", System.currentTimeMillis())
         )
         data.addAll(elements)
         todoAdapter.notifyDataSetChanged()
